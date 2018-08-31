@@ -1,0 +1,48 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.example.dell.xposedst"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            applicationVariants.all { variant ->
+                variant.outputs.all {
+                    def fileName
+                    def date = new Date()
+                    def formattedDate = date.format('yyyyMMddhhmmss')
+                    if (variant.buildType.name.equals('release')) {
+                        fileName = "${variant.mergedFlavor.versionName}_release_${formattedDate}.apk"
+                    } else if (variant.buildType.name.equals('debug')) {
+                        fileName = "${variant.mergedFlavor.versionName}_debug_${formattedDate}.apk"
+                    }
+                    outputFileName = fileName;
+                }
+            }
+
+        }
+    }
+}
+
+repositories {
+    jcenter();
+}
+
+dependencies {
+    compileOnly fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+
+}
